@@ -1,0 +1,31 @@
+h1{
+	font-family: arial;
+}
+.page{
+    color: black;
+    font-size: 30px;
+  }
+  .page:hover{
+    text-decoration: none;
+    color: silver;
+  }
+  .pagination{
+    width: 10%;
+    padding-left: 45%;
+  }
+  tr{
+    text-align: center;
+  }
+  hr{
+    display: block;
+    border-top: 1px solid white;
+  }
+  #container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  input{
+    display: block;
+    width: 20%;
+  }
