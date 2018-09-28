@@ -1,15 +1,12 @@
 const req = new XMLHttpRequest();
 
-req.open('GET', '/listejson', false);
+req.open('GET', '/Eleves', false);
 req.send(null);
 
 if (req.status === 200) {
 	console.log(JSON.parse(req.responseText));
 	var listeEleves = JSON.parse(req.responseText);
 }
-
-// Check ma liste
-var eleves = listeEleves;
 
 var ul = document.createElement("ul");
 
@@ -20,7 +17,7 @@ function showProfile(e){
 	window.location.href = './ProfilEleve.html?id=' + event.target.id;
 }
 // Nom en maj
-eleves.forEach(function(element, index){
+listeEleves.forEach(function(element, index){
 	console.log(element);
 	console.log(element.nom.toUpperCase());
 	var li = document.createElement("li");

@@ -4,20 +4,29 @@ var mongoose = require('mongoose');
 var listeEleves = require('./data/liste.js');
 var Eleves = require('./DB/model.js');
 var bodyParser = require('body-parser');
+var db = mongoose.connection;
 
 // app.use = config du serv
 app.use('/js', express.static('./client/js'));
 app.use('/css', express.static('./client/css'));
+
 // Je configure le body parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/', function (req, res) {
-   res.sendFile(__dirname + '/client/index.html');
+// connection a mongoose
+mongoose.connect('mongodb://localhost/ifas3');
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log('db connected');
 });
 
-app.get('/ProfilPokeCards.html', function (req, res) {
-   res.sendFile(__dirname + '/client/ProfilPokeCards.html');
+// Retourne le json de la bdd sur /Eleves
+app.get('/Eleves', function (req,res) {
+	Eleves.find({}, function(err,docs) {
+		if (err) return console.log(error);
+			res.send(docs);
+	})
 });
 
 app.get('/ListeEleves.html', function (req, res) {
@@ -28,18 +37,29 @@ app.get('/ProfilEleve.html', function (req, res) {
 	res.sendFile(__dirname + '/client/ProfilEleve.html');
 });
 
-app.get('/listejson', function (req, res) {
-   res.json(listeEleves.listeEleves);
+app.get('/ajoutEleve', function (req, res) {
+   res.sendFile(__dirname + '/client/ajoutEleve.html');
 });
 
-app.get('/login', function (req, res) {
-	res.sendFile(__dirname + '/client/login.html');
+app.post('/ajoutSucces', function (req, res) {
+	var ifas3 = new Eleves(req.body);
+  	ifas3.save()
+    .then(item => {
+      res.send("Eleve sauvegarder dans la base");
+    })
+    .catch(err => {
+      res.status(400).send("unable to save to database");
+    });
 });
 
-app.post('/api/login', function (req, res) {
-	console.log(req.body.prenom);
-	console.log(req.body.mail);
+app.get('/', function (req, res) {
+   res.sendFile(__dirname + '/client/index.html');
 });
+
+app.get('/ProfilPokeCards.html', function (req, res) {
+   res.sendFile(__dirname + '/client/ProfilPokeCards.html');
+});
+
 
 app.listen(8080, function () {
 	  console.log('serveur lancé port 8080');
