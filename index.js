@@ -45,7 +45,7 @@ app.post('/ajoutSucces', function (req, res) {
 	var ifas3 = new Eleves(req.body);
   	ifas3.save()
     .then(item => {
-      res.send("Eleve sauvegarder dans la base");
+      res.sendFile(__dirname + '/client/AjoutSucces.html');
     })
     .catch(err => {
       res.status(400).send("unable to save to database");
